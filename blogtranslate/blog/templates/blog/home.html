@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog Translate Mockup</title>
+</head>
+<body>
+    <h1>My Blogs</h1>
+    {% for blog in blogs %}
+    <div id="blog-{{ blog.id }}" style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h2 class="header">{{ blog.header }}</h2>
+        <p class="body">{{ blog.body }}</p>
+        <button onclick="translateBlog({{ blog.id }})">Translate to English</button>
+    </div>
+    {% endfor %}
+
+<script>
+async function translateBlog(blogId) {
+    const response = await fetch(`/translate/${blogId}/`);
+    const data = await response.json();
+
+    if (data.error) {
+        alert(data.error);
+        return;
+    }
+
+    const blogDiv = document.getElementById(`blog-${blogId}`);
+    blogDiv.querySelector(".header").innerText = data.header;
+    blogDiv.querySelector(".body").innerText = data.body;
+}
+</script>
+</body>
+</html>
